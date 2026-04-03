@@ -37,7 +37,7 @@ public class SecurityConfig {
 			// 요청 URL별 인가(권한) 설정
 			.authorizeHttpRequests((auth) -> auth
 						// "/login", "/", "/join" 경로는 로그인하지 않아도 누구나 접근 가능
-						.requestMatchers("/login", "/", "/join").permitAll()
+						.requestMatchers("/login", "/", "/join","/main","/main/**","/join/**").permitAll()
 						// "/admin" 경로는 ADMIN 권한이 있는 사용자만 접근 가능						
 						.requestMatchers("/admin").hasRole("ADMIN")
 						// 그 외 모든 요청은 로그인(인증)된 사용자만 접근 가능
