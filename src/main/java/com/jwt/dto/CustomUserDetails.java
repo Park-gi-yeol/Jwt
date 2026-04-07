@@ -25,7 +25,7 @@ public class CustomUserDetails implements UserDetails{
 		collection.add(new GrantedAuthority() {
 			
 			@Override
-			public @Nullable String getAuthority() {
+			public String getAuthority() {
 				// TODO Auto-generated method stub
 				return userEntity.getRole();
 			}
@@ -34,7 +34,7 @@ public class CustomUserDetails implements UserDetails{
 	}
 
 	@Override
-	public @Nullable String getPassword() {
+	public String getPassword() {
 		// TODO Auto-generated method stub
 		return userEntity.getPassword();
 	}
