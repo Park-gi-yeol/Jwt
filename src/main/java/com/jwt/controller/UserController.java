@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jwt.dto.JoinDTO;
-import com.jwt.service.JoinService;
+import com.jwt.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/join")
+@RequestMapping("/user")
 @RequiredArgsConstructor
-public class JoinController {
+public class UserController {
 	
-	private final JoinService joinService;
+	private final UserService joinService;
 	
 	
 	@PostMapping("/join")

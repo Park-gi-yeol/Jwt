@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class JoinService {
+public class UserService {
 	
 	private final UserRepository userRepository;
 	private final BCryptPasswordEncoder bCryptPasswrodEncoder;

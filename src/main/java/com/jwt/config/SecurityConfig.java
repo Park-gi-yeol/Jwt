@@ -2,22 +2,36 @@ package com.jwt.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.jwt.jwt.LoginFilter;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+	
+	private final AuthenticationConfiguration authenticationConfiguration;
+	
 	
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswrodEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-    
+    @Bean
+    public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
+    	return config.getAuthenticationManager();
+    }
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -37,11 +51,13 @@ public class SecurityConfig {
 			// 요청 URL별 인가(권한) 설정
 			.authorizeHttpRequests((auth) -> auth
 						// "/login", "/", "/join" 경로는 로그인하지 않아도 누구나 접근 가능
-						.requestMatchers("/login", "/", "/join","/main","/main/**","/join/**").permitAll()
+						.requestMatchers("/login", "/", "/join","/main","/main/**","/user/**").permitAll()
 						// "/admin" 경로는 ADMIN 권한이 있는 사용자만 접근 가능						
 						.requestMatchers("/admin").hasRole("ADMIN")
 						// 그 외 모든 요청은 로그인(인증)된 사용자만 접근 가능
 						.anyRequest().authenticated());
+		http
+			.addFilterAt(new LoginFilter(authManager(authenticationConfiguration)), UsernamePasswordAuthenticationFilter.class);
 		http
 			// 세션 관리 방식 설정
 			.sessionManagement((session) -> session
